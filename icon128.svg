@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg">
+  <!-- LinkedIn blue background -->
+  <rect width="128" height="128" fill="#0073b1"/>
+  
+  <!-- White circle -->
+  <circle cx="64" cy="64" r="42.66666666666667" fill="white"/>
+  
+  <!-- LN text -->
+  <text x="64" y="64" 
+        font-family="Arial, sans-serif" 
+        font-size="44.8" 
+        font-weight="bold" 
+        fill="#0073b1" 
+        text-anchor="middle" 
+        dominant-baseline="central">LN</text>
+</svg>

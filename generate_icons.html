@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LinkedIn Name Extractor - Icon Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #0073b1; }
+        .icons-container {
+            display: flex;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .icon-item {
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        button {
+            background: #0073b1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #005885;
+        }
+        .instructions {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LinkedIn Name Extractor - Icon Generator</h1>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <ol>
+                <li>The icons are generated automatically below</li>
+                <li>Right-click each icon and "Save Image As..."</li>
+                <li>Save as: icon16.png, icon48.png, icon128.png</li>
+                <li>Save them in the linkedin-name-extension folder</li>
+            </ol>
+        </div>
+
+        <div class="icons-container">
+            <div class="icon-item">
+                <h3>16x16</h3>
+                <canvas id="icon16" width="16" height="16"></canvas>
+                <br>
+                <button onclick="downloadIcon('icon16', 16)">Download icon16.png</button>
+            </div>
+            
+            <div class="icon-item">
+                <h3>48x48</h3>
+                <canvas id="icon48" width="48" height="48"></canvas>
+                <br>
+                <button onclick="downloadIcon('icon48', 48)">Download icon48.png</button>
+            </div>
+            
+            <div class="icon-item">
+                <h3>128x128</h3>
+                <canvas id="icon128" width="128" height="128"></canvas>
+                <br>
+                <button onclick="downloadIcon('icon128', 128)">Download icon128.png</button>
+            </div>
+        </div>
+
+        <button onclick="downloadAllIcons()" style="background: #28a745; font-size: 16px; padding: 12px 30px;">
+            📥 Download All Icons
+        </button>
+    </div>
+
+    <script>
+        function drawIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // LinkedIn blue background
+            ctx.fillStyle = '#0073b1';
+            ctx.fillRect(0, 0, size, size);
+            
+            // White circle
+            ctx.fillStyle = 'white';
+            const margin = size / 6;
+            const radius = (size - 2 * margin) / 2;
+            const centerX = size / 2;
+            const centerY = size / 2;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Draw "LN" text
+            ctx.fillStyle = '#0073b1';
+            ctx.font = `bold ${size * 0.35}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('LN', centerX, centerY);
+        }
+
+        function downloadIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function downloadAllIcons() {
+            setTimeout(() => downloadIcon('icon16', 16), 100);
+            setTimeout(() => downloadIcon('icon48', 48), 300);
+            setTimeout(() => downloadIcon('icon128', 128), 500);
+        }
+
+        // Generate icons on page load
+        window.onload = function() {
+            drawIcon('icon16', 16);
+            drawIcon('icon48', 48);
+            drawIcon('icon128', 128);
+        };
+    </script>
+</body>
+</html>
