@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "LinkedIn Name Extractor",
-  "version": "1.0.0",
-  "description": "Automatically extracts the first name when opening LinkedIn message boxes",
+  "version": "1.1.0",
+  "description": "Automatically extracts the first name when opening LinkedIn message boxes with customizable message templates",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "host_permissions": [
     "https://www.linkedin.com/*"
@@ -21,5 +22,14 @@
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "default_title": "LinkedIn Name Extractor Settings"
   }
 }

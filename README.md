@@ -4,8 +4,10 @@ A Chrome extension that automatically extracts and inserts the first name of a L
 
 ## Features
 
-- **Auto-insert Name**: Automatically detects the person's name from their LinkedIn profile and inserts "Hi, [FirstName] " into the message box
+- **Auto-insert Name**: Automatically detects the person's name from their LinkedIn profile and inserts it into your custom message template
+- **Custom Message Templates**: Create personalized message templates with the {name} placeholder - add multi-line intros, custom greetings, and more
 - **Attachment Button**: Adds a custom "📎 Attach File" button to LinkedIn message boxes for easy file attachment
+- **Settings Panel**: Easy-to-use popup interface for customizing your message template
 - **Smart Detection**: Works on LinkedIn messaging interface and profile pages
 - **Non-intrusive**: Only inserts greeting when the message box is empty
 
@@ -31,11 +33,20 @@ A Chrome extension that automatically extracts and inserts the first name of a L
 
 ## Usage
 
+### Customize Your Message Template
+1. Click the extension icon in your Chrome toolbar
+2. Enter your custom message template using `{name}` as a placeholder
+3. Examples:
+   - Simple: `Hi, {name} `
+   - With intro: `Hi, {name}\n\nI hope this message finds you well! `
+   - Professional: `Hello {name},\n\nI came across your profile and wanted to reach out. `
+4. Click "Save Settings"
+
 ### Name Insertion
 1. Navigate to LinkedIn (https://www.linkedin.com)
 2. Go to someone's profile or open a conversation in LinkedIn messages
 3. Click on the message box to compose a message
-4. The extension will automatically insert "Hi, [FirstName] " with the cursor positioned after it
+4. The extension will automatically insert your custom message with the person's first name
 5. Continue typing your message
 
 ### File Attachment
@@ -56,9 +67,12 @@ The extension:
 
 ## Features in Detail
 
-### Greeting Format
-The extension inserts: **"Hi, [FirstName] "**
-- Example: "Hi, John " (with a space after the name for easy typing)
+### Custom Message Templates
+The extension uses customizable message templates with `{name}` placeholder:
+- **Default**: `Hi, {name} ` → "Hi, John "
+- **With spacing**: `Hi, {name}\n\nI hope...` → "Hi, John\n\nI hope..."
+- **Multi-line**: Full professional introductions with line breaks
+- **Real-time preview**: See how your message will look before saving
 
 ### Attachment Button
 - Styled to match LinkedIn's design language
@@ -120,14 +134,19 @@ To modify the extension:
 
 - `manifest.json` - Extension configuration
 - `content.js` - Main script that runs on LinkedIn pages
+- `popup.html` - Settings interface
+- `popup.js` - Settings logic
+- `popup.css` - Settings styling
 - `README.md` - This file
 
 ## Future Enhancements
 
-- Custom greeting templates
+- ✅ Custom greeting templates (Added in v1.1.0!)
+- ✅ Settings panel for customization (Added in v1.1.0!)
 - Support for different languages
 - Better integration with LinkedIn's attachment API
-- Settings panel for customization
+- Multiple saved templates
+- Template variables (company, position, etc.)
 
 ## License
 

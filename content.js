@@ -4,6 +4,15 @@
 (function() {
   'use strict';
 
+  // Default message template
+  const DEFAULT_TEMPLATE = 'Hi, {name} ';
+  
+  // Store the current message template
+  let messageTemplate = DEFAULT_TEMPLATE;
+  
+  // Load message template from storage
+  loadMessageTemplate();
+
   // Function to extract first name from LinkedIn profile
   function extractFirstName() {
     // Try multiple selectors as LinkedIn's DOM structure may vary
@@ -43,6 +52,22 @@
     return firstName;
   }
 
+  // Load message template from Chrome storage
+  function loadMessageTemplate() {
+    chrome.storage.sync.get(['messageTemplate'], (result) => {
+      messageTemplate = result.messageTemplate || DEFAULT_TEMPLATE;
+      console.log('LinkedIn Name Extractor: Loaded template:', messageTemplate);
+    });
+  }
+  
+  // Listen for template updates from popup
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === 'reloadSettings') {
+      loadMessageTemplate();
+      console.log('LinkedIn Name Extractor: Settings reloaded');
+    }
+  });
+
   // Function to insert first name into message box
   function insertFirstName(messageBox, firstName) {
     if (!messageBox || !firstName) return;
@@ -57,9 +82,12 @@
 
     // Only insert if the message box is empty or contains placeholder text
     if (currentContent.trim() === '' || currentContent.includes('Write a message')) {
+      // Generate message from template
+      const customMessage = messageTemplate.replace(/{name}/g, firstName);
+      
       // For contenteditable divs
       if (messageBox.isContentEditable) {
-        messageBox.textContent = `Hi, ${firstName} `;
+        messageBox.textContent = customMessage;
         
         // Move cursor to the end
         const range = document.createRange();
@@ -74,7 +102,7 @@
       } 
       // For textarea elements
       else if (messageBox.tagName === 'TEXTAREA') {
-        messageBox.value = `Hi, ${firstName} `;
+        messageBox.value = customMessage;
         messageBox.focus();
         messageBox.setSelectionRange(messageBox.value.length, messageBox.value.length);
       }
