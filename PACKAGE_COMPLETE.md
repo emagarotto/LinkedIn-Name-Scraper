@@ -1,6 +1,6 @@
 # 🎉 Package Complete - Ready for Chrome Web Store!
 
-Your LinkedIn Message Helper extension is fully packaged and ready to upload!
+Your LinkedIn Name Extractor extension is fully packaged and ready to upload!
 
 ## ✅ What's Included
 
@@ -79,7 +79,7 @@ linkedin-name-extractor.zip contains:
 
 | Property | Value |
 |----------|-------|
-| Name | LinkedIn Message Helper |
+| Name | LinkedIn Name Extractor |
 | Version | 1.0.0 |
 | Manifest | V3 |
 | Permissions | activeTab, scripting |
@@ -97,7 +97,7 @@ linkedin-name-extractor.zip contains:
 
 ## 📝 Store Listing Preview
 
-**Name**: LinkedIn Message Helper
+**Name**: LinkedIn Name Extractor
 
 **Summary**: Auto-insert first names in LinkedIn messages and quickly attach files with one click.
 

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "LinkedIn Message Helper",
-  "version": "1.3.0",
+  "name": "LinkedIn Name Extractor",
+  "version": "1.2.0",
   "description": "Automatically extracts the first name when opening LinkedIn message boxes with customizable message templates",
   "permissions": [
     "activeTab",
@@ -30,6 +30,6 @@
       "48": "icon48.png",
       "128": "icon128.png"
     },
-    "default_title": "LinkedIn Message Helper Settings"
+    "default_title": "LinkedIn Name Extractor Settings"
   }
 }

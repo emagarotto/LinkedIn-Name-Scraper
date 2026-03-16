@@ -31,7 +31,7 @@ Your extension is packaged and ready to upload: **`linkedin-name-extractor.zip`*
 #### Store Listing Tab
 
 **Product Details:**
-- **Name**: LinkedIn Message Helper
+- **Name**: LinkedIn Name Extractor
 - **Summary**: Auto-insert first names in LinkedIn messages and quickly attach files with one click.
 - **Description**: (Copy from STORE_ASSETS.md)
 - **Category**: Choose "Productivity" or "Social & Communication"
