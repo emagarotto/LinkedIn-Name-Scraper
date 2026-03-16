@@ -21,12 +21,21 @@
       'h2.msg-entity-lockup__entity-title',
       // Profile name on profile pages
       'h1.text-heading-xlarge',
+      'h1.inline',
       // Profile name in conversation header
       '.msg-thread__link-to-profile',
       // Alternative profile name selector
       '[data-generated-suggestion-target] h1',
       // Profile overlay
-      '.pv-text-details__left-panel h1'
+      '.pv-text-details__left-panel h1',
+      // Modern profile variations
+      '.pv-top-card--list h1',
+      '.artdeco-entity-lockup__title',
+      // Message thread header
+      '.msg-overlay-conversation-bubble__title',
+      // Generic fallbacks
+      '[data-control-name="overlay.close_conversation_window"] + div h2',
+      'a[data-control-name="view_profile"] span[aria-hidden="true"]'
     ];
 
     let fullName = null;
@@ -41,7 +50,9 @@
     }
 
     if (!fullName) {
-      console.log('LinkedIn Name Extractor: Could not find profile name');
+      console.warn('LinkedIn Name Extractor: Could not find profile name');
+      console.log('LinkedIn Name Extractor: Tried selectors:', selectors);
+      console.log('LinkedIn Name Extractor: Run DEBUGGING.md script to find current selectors');
       return null;
     }
 
@@ -127,7 +138,13 @@
       // Message textarea
       'textarea.msg-form__textarea',
       // Quick reply box
-      '.msg-form__msg-content-container textarea'
+      '.msg-form__msg-content-container textarea',
+      // Generic contenteditable with role textbox
+      '[contenteditable="true"][role="textbox"]',
+      // Modern message box
+      '.msg-s-message-group__message-field',
+      // Compose box variations
+      'div.msg-form__msg-content-container [contenteditable="true"]'
     ];
 
     for (const selector of messageBoxSelectors) {
@@ -163,12 +180,17 @@
   document.addEventListener('focusin', (event) => {
     const target = event.target;
     
-    // Check if the focused element is a message box
-    if (target.matches('.msg-form__contenteditable, textarea.msg-form__textarea, .msg-form__msg-content-container textarea')) {
+    // Check if the focused element is a message box (more flexible matching)
+    const isMessageBox = target.matches('.msg-form__contenteditable, textarea.msg-form__textarea, .msg-form__msg-content-container textarea, [contenteditable="true"][role="textbox"], .msg-s-message-group__message-field');
+    
+    if (isMessageBox || (target.isContentEditable && target.closest('.msg-form, .msg-s-message-list-container'))) {
+      console.log('LinkedIn Name Extractor: Message box focused');
       setTimeout(() => {
         const firstName = extractFirstName();
         if (firstName) {
           insertFirstName(target, firstName);
+        } else {
+          console.log('LinkedIn Name Extractor: No name found to insert');
         }
       }, 100);
     }
