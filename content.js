@@ -5,7 +5,7 @@
   'use strict';
 
   // Default message template
-  const DEFAULT_TEMPLATE = 'Hi, {name} ';
+  const DEFAULT_TEMPLATE = `Hi, {name}.\n\nI'm sharing a brief deck you're welcome to socialize to folks in your network you think might be interested. It covers my value prop as a force multiplier (UX Strategist, Product Leader, & AI Vibe Coding Accelerant), use cases, and deployment approach.\n\nRegards,\nEzio Magarotto, CUA, CAWC, & Veteran\nhttps://www.magarottos.com/\nhttps://www.linkedin.com/in/eziomagarotto`;
   
   // Store the current message template
   let messageTemplate = DEFAULT_TEMPLATE;
@@ -96,24 +96,20 @@
       // Generate message from template
       const customMessage = messageTemplate.replace(/{name}/g, firstName);
       
-      // For contenteditable divs
+      // For contenteditable divs: use execCommand so React's state is
+      // updated and the text is actually included when send is clicked.
       if (messageBox.isContentEditable) {
-        messageBox.textContent = customMessage;
-        
-        // Move cursor to the end
-        const range = document.createRange();
-        const selection = window.getSelection();
-        range.selectNodeContents(messageBox);
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        
-        // Focus the message box
         messageBox.focus();
-      } 
+        document.execCommand('selectAll', false, null);
+        document.execCommand('insertText', false, customMessage);
+      }
       // For textarea elements
       else if (messageBox.tagName === 'TEXTAREA') {
-        messageBox.value = customMessage;
+        const nativeSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLTextAreaElement.prototype, 'value'
+        ).set;
+        nativeSetter.call(messageBox, customMessage);
+        messageBox.dispatchEvent(new Event('input', { bubbles: true }));
         messageBox.focus();
         messageBox.setSelectionRange(messageBox.value.length, messageBox.value.length);
       }
