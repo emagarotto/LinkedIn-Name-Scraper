@@ -178,6 +178,11 @@
     console.log('LinkedIn Name Extractor: Observer started');
   }
 
+  // Returns a random delay between min and max ms to mimic human typing latency
+  function humanDelay(min = 400, max = 900) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   // Listen for focus events on message boxes (when user clicks into them)
   document.addEventListener('focusin', (event) => {
     const target = event.target;
@@ -187,6 +192,8 @@
     
     if (isMessageBox || (target.isContentEditable && target.closest('.msg-form, .msg-s-message-list-container'))) {
       console.log('LinkedIn Name Extractor: Message box focused');
+      // Use a randomized human-like delay (400-900ms) rather than a fixed
+      // interval — zero/fixed delays are a bot signal LinkedIn may detect
       setTimeout(() => {
         const firstName = extractFirstName();
         if (firstName) {
@@ -194,7 +201,7 @@
         } else {
           console.log('LinkedIn Name Extractor: No name found to insert');
         }
-      }, 100);
+      }, humanDelay());
     }
   }, true);
 
