@@ -5,7 +5,7 @@
   'use strict';
 
   // Default message template
-  const DEFAULT_TEMPLATE = 'Hi, {name} ';
+  const DEFAULT_TEMPLATE = `Hi, {name}.\n\nI'm sharing a brief deck you're welcome to socialize to folks in your network you think might be interested. It covers my value prop as a force multiplier (UX Strategist, Product Leader, & AI Vibe Coding Accelerant), use cases, and deployment approach.\n\nRegards,\nEzio Magarotto, CUA, CAWC, & Veteran\nhttps://www.magarottos.com/\nhttps://www.linkedin.com/in/eziomagarotto`;
   
   // Store the current message template
   let messageTemplate = DEFAULT_TEMPLATE;
@@ -98,7 +98,7 @@
       
       // For contenteditable divs
       if (messageBox.isContentEditable) {
-        messageBox.textContent = customMessage;
+        messageBox.innerText = customMessage;  // innerText preserves \n as line breaks
         
         // Move cursor to the end
         const range = document.createRange();
