@@ -6,7 +6,6 @@ A Chrome extension that automatically extracts and inserts the first name of a L
 
 - **Auto-insert Name**: Automatically detects the person's name from their LinkedIn profile and inserts it into your custom message template
 - **Custom Message Templates**: Create personalized message templates with the {name} placeholder - add multi-line intros, custom greetings, and more
-- **Attachment Button**: Adds a custom "📎 Attach File" button to LinkedIn message boxes for easy file attachment
 - **Settings Panel**: Easy-to-use popup interface for customizing your message template
 - **Smart Detection**: Works on LinkedIn messaging interface and profile pages
 - **Non-intrusive**: Only inserts greeting when the message box is empty
@@ -49,21 +48,13 @@ A Chrome extension that automatically extracts and inserts the first name of a L
 4. The extension will automatically insert your custom message with the person's first name
 5. Continue typing your message
 
-### File Attachment
-1. Look for the blue "📎 Attach File" button near the message box
-2. Click the button to select a file from your computer
-3. The extension will attempt to trigger LinkedIn's native attachment functionality
-4. If native functionality isn't available, a file preview will be shown
-
 ## How It Works
 
 The extension:
 1. Monitors LinkedIn pages for profile names
 2. Extracts the first name from the full name
 3. Watches for when you focus on a message box
-4. Automatically inserts a personalized greeting: "Hi, [FirstName] "
-5. Adds a custom attachment button to message forms
-6. Attempts to integrate with LinkedIn's native attachment system
+4. Automatically inserts a personalized greeting using your custom template
 
 ## Features in Detail
 
@@ -73,13 +64,6 @@ The extension uses customizable message templates with `{name}` placeholder:
 - **With spacing**: `Hi, {name}\n\nI hope...` → "Hi, John\n\nI hope..."
 - **Multi-line**: Full professional introductions with line breaks
 - **Real-time preview**: See how your message will look before saving
-
-### Attachment Button
-- Styled to match LinkedIn's design language
-- Blue button with paperclip emoji
-- File size preview
-- Remove button for selected files
-- Attempts to use LinkedIn's native attachment functionality when available
 
 ## Debugging
 
@@ -102,7 +86,6 @@ This extension:
 - Does not collect or transmit any data
 - Does not store any information
 - All processing happens locally in your browser
-- Files selected are not uploaded by the extension itself
 
 ## Troubleshooting
 
@@ -112,12 +95,7 @@ This extension:
 - Try refreshing the page
 - Verify the extension is enabled in chrome://extensions/
 
-**The attachment button doesn't appear:**
-- Refresh the LinkedIn page
-- Check if the message box is fully loaded
-- Look in the console for any error messages
-
-**Wrong name is being extracted:**
+**Wrong name is being extracted:
 - LinkedIn's page structure may have changed
 - Check the console logs to see what name was detected
 - You may need to update the CSS selectors in content.js
