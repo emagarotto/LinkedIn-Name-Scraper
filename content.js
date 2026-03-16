@@ -13,6 +13,21 @@
   // Load message template from storage
   loadMessageTemplate();
 
+  // Tracks whether a message was just sent — blocks re-insertion
+  // while LinkedIn clears and re-renders the message box
+  let justSent = false;
+
+  document.addEventListener('click', (e) => {
+    const sendBtn = e.target.closest(
+      'button.msg-form__send-button, button[data-control-name="send"], .msg-form__send-btn'
+    );
+    if (sendBtn) {
+      justSent = true;
+      setTimeout(() => { justSent = false; }, 3000);
+      console.log('LinkedIn Message Helper: Send detected, pausing insertion for 3s');
+    }
+  }, true);
+
   // Function to extract first name from LinkedIn profile
   function extractFirstName() {
     // Try multiple selectors as LinkedIn's DOM structure may vary
@@ -82,6 +97,7 @@
   // Function to insert first name into message box
   function insertFirstName(messageBox, firstName) {
     if (!messageBox || !firstName) return;
+    if (justSent) return;
 
     // Check if we've already inserted the name (to avoid duplicates)
     if (messageBox.dataset.nameInserted === 'true') {
