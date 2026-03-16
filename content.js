@@ -96,24 +96,26 @@
       // Generate message from template
       const customMessage = messageTemplate.replace(/{name}/g, firstName);
       
-      // For contenteditable divs
+      // For contenteditable divs (LinkedIn uses React, so we must use
+      // execCommand to fire native input events React's state can track.
+      // Setting innerText/textContent directly bypasses React and the
+      // text won't be sent.)
       if (messageBox.isContentEditable) {
-        messageBox.innerText = customMessage;  // innerText preserves \n as line breaks
-        
-        // Move cursor to the end
-        const range = document.createRange();
-        const selection = window.getSelection();
-        range.selectNodeContents(messageBox);
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        
-        // Focus the message box
         messageBox.focus();
-      } 
+        // Select any existing content so we replace it cleanly
+        document.execCommand('selectAll', false, null);
+        // insertText fires the input events LinkedIn/React listens to,
+        // dismisses the placeholder, and keeps the text on send
+        document.execCommand('insertText', false, customMessage);
+      }
       // For textarea elements
       else if (messageBox.tagName === 'TEXTAREA') {
-        messageBox.value = customMessage;
+        // Use the native setter so React registers the change
+        const nativeSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLTextAreaElement.prototype, 'value'
+        ).set;
+        nativeSetter.call(messageBox, customMessage);
+        messageBox.dispatchEvent(new Event('input', { bubbles: true }));
         messageBox.focus();
         messageBox.setSelectionRange(messageBox.value.length, messageBox.value.length);
       }
