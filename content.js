@@ -1,15 +1,16 @@
 // LinkedIn Message Helper - Content Script
-// Automatically extracts first name when opening message boxes
+// Injects a hamburger button into LinkedIn message boxes to paste
+// a personalised message with the recipient's scraped first name.
 
 (function() {
   'use strict';
 
   // Default message template
   const DEFAULT_TEMPLATE = `Hi, {name}.\n\nI'm sharing a brief deck you're welcome to socialize to folks in your network you think might be interested. It covers my value prop as a force multiplier (UX Strategist, Product Leader, & AI Vibe Coding Accelerant), use cases, and deployment approach.\n\nRegards,\nEzio Magarotto, CUA, CAWC, & Veteran\nhttps://www.magarottos.com/\nhttps://www.linkedin.com/in/eziomagarotto`;
-  
+
   // Store the current message template
   let messageTemplate = DEFAULT_TEMPLATE;
-  
+
   // Load message template from storage
   loadMessageTemplate();
 
@@ -79,138 +80,138 @@
     }
   });
 
-  // Function to insert first name into message box
-  function insertFirstName(messageBox, firstName) {
-    if (!messageBox || !firstName) return;
+  // ── Message insertion ────────────────────────────────────────────────────
 
-    // Check if we've already inserted the name (to avoid duplicates)
-    if (messageBox.dataset.nameInserted === 'true') {
-      return;
+  // Paste the templated message into the given message box using execCommand
+  // so React's state is updated (text will actually be sent).
+  function pasteMessage(messageBox, firstName) {
+    const customMessage = messageTemplate.replace(/{name}/g, firstName);
+
+    if (messageBox.isContentEditable) {
+      messageBox.focus();
+      document.execCommand('selectAll', false, null);
+      document.execCommand('insertText', false, customMessage);
+    } else if (messageBox.tagName === 'TEXTAREA') {
+      const nativeSetter = Object.getOwnPropertyDescriptor(
+        window.HTMLTextAreaElement.prototype, 'value'
+      ).set;
+      nativeSetter.call(messageBox, customMessage);
+      messageBox.dispatchEvent(new Event('input', { bubbles: true }));
+      messageBox.focus();
+      messageBox.setSelectionRange(messageBox.value.length, messageBox.value.length);
     }
-
-    // Get current content
-    const currentContent = messageBox.textContent || '';
-
-    // Only insert if the message box is empty or contains placeholder text
-    if (currentContent.trim() === '' || currentContent.includes('Write a message')) {
-      // Generate message from template
-      const customMessage = messageTemplate.replace(/{name}/g, firstName);
-      
-      // For contenteditable divs (LinkedIn uses React, so we must use
-      // execCommand to fire native input events React's state can track.
-      // Setting innerText/textContent directly bypasses React and the
-      // text won't be sent.)
-      if (messageBox.isContentEditable) {
-        messageBox.focus();
-        // Select any existing content so we replace it cleanly
-        document.execCommand('selectAll', false, null);
-        // insertText fires the input events LinkedIn/React listens to,
-        // dismisses the placeholder, and keeps the text on send
-        document.execCommand('insertText', false, customMessage);
-      }
-      // For textarea elements
-      else if (messageBox.tagName === 'TEXTAREA') {
-        // Use the native setter so React registers the change
-        const nativeSetter = Object.getOwnPropertyDescriptor(
-          window.HTMLTextAreaElement.prototype, 'value'
-        ).set;
-        nativeSetter.call(messageBox, customMessage);
-        messageBox.dispatchEvent(new Event('input', { bubbles: true }));
-        messageBox.focus();
-        messageBox.setSelectionRange(messageBox.value.length, messageBox.value.length);
-      }
-
-      // Mark as inserted
-      messageBox.dataset.nameInserted = 'true';
-      console.log('LinkedIn Message Helper: Inserted name into message box');
-    }
+    console.log('LinkedIn Message Helper: Message pasted for', firstName);
   }
 
-  // Function to find and populate message boxes
-  function populateMessageBox() {
-    const firstName = extractFirstName();
-    if (!firstName) return;
+  // ── Find the message input inside a given form/container ─────────────────
 
-    // Selectors for message input boxes
-    const messageBoxSelectors = [
-      // Main messaging compose box
-      '.msg-form__contenteditable[contenteditable="true"]',
-      // Alternative messaging box
-      '.msg-form__msg-content-container--scrollable [contenteditable="true"]',
-      // Message textarea
-      'textarea.msg-form__textarea',
-      // Quick reply box
-      '.msg-form__msg-content-container textarea',
-      // Generic contenteditable with role textbox
-      '[contenteditable="true"][role="textbox"]',
-      // Modern message box
-      '.msg-s-message-group__message-field',
-      // Compose box variations
-      'div.msg-form__msg-content-container [contenteditable="true"]'
+  function findMessageBox(container) {
+    const selectors = [
+      '[contenteditable="true"]',
+      'textarea'
+    ];
+    for (const sel of selectors) {
+      const el = container.querySelector(sel);
+      if (el) return el;
+    }
+    return null;
+  }
+
+  // ── Hamburger button injection ────────────────────────────────────────────
+
+  function createButton() {
+    const btn = document.createElement('button');
+    btn.className = 'lmh-paste-btn';
+    btn.title = 'Paste message with name (LinkedIn Message Helper)';
+    btn.type = 'button';
+    btn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="white">
+        <rect x="2" y="3"  width="14" height="2" rx="1"/>
+        <rect x="2" y="8"  width="14" height="2" rx="1"/>
+        <rect x="2" y="13" width="14" height="2" rx="1"/>
+      </svg>`;
+    btn.style.cssText = [
+      'background:#0073b1',
+      'border:none',
+      'border-radius:6px',
+      'cursor:pointer',
+      'padding:5px 8px',
+      'margin-left:6px',
+      'display:inline-flex',
+      'align-items:center',
+      'justify-content:center',
+      'vertical-align:middle',
+      'transition:background 0.15s',
+      'flex-shrink:0'
+    ].join(';');
+
+    btn.addEventListener('mouseenter', () => btn.style.background = '#005885');
+    btn.addEventListener('mouseleave', () => btn.style.background = '#0073b1');
+    return btn;
+  }
+
+  // Inject the button into any LinkedIn message form that doesn't have one yet
+  function injectButtons() {
+    // Target the toolbar/footer row where LinkedIn's own send/attach buttons live
+    const toolbarSelectors = [
+      '.msg-form__footer',
+      '.msg-form__left-actions',
+      '.msg-form__right-actions'
     ];
 
-    for (const selector of messageBoxSelectors) {
-      const messageBoxes = document.querySelectorAll(selector);
-      messageBoxes.forEach(box => {
-        insertFirstName(box, firstName);
+    for (const sel of toolbarSelectors) {
+      document.querySelectorAll(sel).forEach(toolbar => {
+        if (toolbar.querySelector('.lmh-paste-btn')) return; // already injected
+
+        const btn = createButton();
+
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const firstName = extractFirstName();
+          if (!firstName) {
+            btn.title = 'Could not find name — check console (F12)';
+            btn.style.background = '#c0392b';
+            setTimeout(() => {
+              btn.style.background = '#0073b1';
+              btn.title = 'Paste message with name (LinkedIn Message Helper)';
+            }, 2000);
+            console.warn('LinkedIn Message Helper: No name found on this page');
+            return;
+          }
+
+          // Walk up to the form and find the message input inside it
+          const form = toolbar.closest('.msg-form, form, [data-test-modal]') || document.body;
+          const messageBox = findMessageBox(form) ||
+            document.querySelector('[contenteditable="true"]') ||
+            document.querySelector('textarea');
+
+          if (!messageBox) {
+            console.warn('LinkedIn Message Helper: Could not find message box');
+            return;
+          }
+
+          pasteMessage(messageBox, firstName);
+
+          // Brief green flash to confirm
+          btn.style.background = '#27ae60';
+          setTimeout(() => btn.style.background = '#0073b1', 1000);
+        });
+
+        toolbar.appendChild(btn);
+        console.log('LinkedIn Message Helper: Button injected into', sel);
       });
     }
   }
 
-  // Observer to watch for new message boxes appearing
-  function observeMessageBoxes() {
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        // Check if message box elements were added
-        if (mutation.addedNodes.length > 0) {
-          // Give LinkedIn a moment to finish rendering
-          setTimeout(populateMessageBox, 300);
-        }
-      }
-    });
+  // ── MutationObserver to catch dynamically rendered forms ──────────────────
 
-    // Observe the entire document for changes
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
+  const observer = new MutationObserver(() => injectButtons());
+  observer.observe(document.body, { childList: true, subtree: true });
 
-    console.log('LinkedIn Message Helper: Observer started');
-  }
+  // Initial pass after the page has settled
+  setTimeout(injectButtons, 1000);
 
-  // Returns a random delay between min and max ms to mimic human typing latency
-  function humanDelay(min = 400, max = 900) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  // Listen for focus events on message boxes (when user clicks into them)
-  document.addEventListener('focusin', (event) => {
-    const target = event.target;
-    
-    // Check if the focused element is a message box (more flexible matching)
-    const isMessageBox = target.matches('.msg-form__contenteditable, textarea.msg-form__textarea, .msg-form__msg-content-container textarea, [contenteditable="true"][role="textbox"], .msg-s-message-group__message-field');
-    
-    if (isMessageBox || (target.isContentEditable && target.closest('.msg-form, .msg-s-message-list-container'))) {
-      console.log('LinkedIn Message Helper: Message box focused');
-      // Use a randomized human-like delay (400-900ms) rather than a fixed
-      // interval — zero/fixed delays are a bot signal LinkedIn may detect
-      setTimeout(() => {
-        const firstName = extractFirstName();
-        if (firstName) {
-          insertFirstName(target, firstName);
-        } else {
-          console.log('LinkedIn Message Helper: No name found to insert');
-        }
-      }, humanDelay());
-    }
-  }, true);
-
-  // Initialize
   console.log('LinkedIn Message Helper: Extension loaded');
-  
-  // Initial attempt to populate
-  setTimeout(populateMessageBox, 1000);
-  
-  // Start observing for dynamic changes
-  observeMessageBoxes();
 })();
