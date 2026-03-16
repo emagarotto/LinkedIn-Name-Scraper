@@ -1,4 +1,4 @@
-# LinkedIn Name Extractor
+# LinkedIn Message Helper
 
 A Chrome extension that automatically extracts and inserts the first name of a LinkedIn user when you open a message box, plus adds a convenient attachment button.
 
@@ -27,7 +27,7 @@ A Chrome extension that automatically extracts and inserts the first name of a L
    - Click "Select Folder"
 
 5. **Verify Installation**
-   - You should see "LinkedIn Name Extractor" in your extensions list
+   - You should see "LinkedIn Message Helper" in your extensions list
    - The extension should be enabled (toggle is blue)
 
 ## Usage
@@ -70,7 +70,7 @@ The extension uses customizable message templates with `{name}` placeholder:
 To see what the extension is doing:
 1. Open Chrome DevTools (F12 or right-click → Inspect)
 2. Go to the Console tab
-3. Look for messages starting with "LinkedIn Name Extractor:"
+3. Look for messages starting with "LinkedIn Message Helper:"
 
 ## Notes
 
@@ -105,7 +105,7 @@ This extension:
 To modify the extension:
 1. Edit the files in this directory
 2. Go to chrome://extensions/
-3. Click the reload icon on the LinkedIn Name Extractor card
+3. Click the reload icon on the LinkedIn Message Helper card
 4. Refresh any LinkedIn pages you have open
 
 ## Files

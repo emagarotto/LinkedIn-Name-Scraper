@@ -1,4 +1,4 @@
-// Popup script for LinkedIn Name Extractor settings
+// Popup script for LinkedIn Message Helper settings
 
 const DEFAULT_TEMPLATE = `Hi, {name}.\n\nI'm sharing a brief deck you're welcome to socialize to folks in your network you think might be interested. It covers my value prop as a force multiplier (UX Strategist, Product Leader, & AI Vibe Coding Accelerant), use cases, and deployment approach.\n\nRegards,\nEzio Magarotto, CUA, CAWC, & Veteran\nhttps://www.magarottos.com/\nhttps://www.linkedin.com/in/eziomagarotto`;
 

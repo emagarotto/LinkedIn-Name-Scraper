@@ -1,4 +1,4 @@
-// LinkedIn Name Extractor - Content Script
+// LinkedIn Message Helper - Content Script
 // Automatically extracts first name when opening message boxes
 
 (function() {
@@ -50,15 +50,15 @@
     }
 
     if (!fullName) {
-      console.warn('LinkedIn Name Extractor: Could not find profile name');
-      console.log('LinkedIn Name Extractor: Tried selectors:', selectors);
-      console.log('LinkedIn Name Extractor: Run DEBUGGING.md script to find current selectors');
+      console.warn('LinkedIn Message Helper: Could not find profile name');
+      console.log('LinkedIn Message Helper: Tried selectors:', selectors);
+      console.log('LinkedIn Message Helper: Run DEBUGGING.md script to find current selectors');
       return null;
     }
 
     // Extract first name (everything before the first space)
     const firstName = fullName.split(/\s+/)[0];
-    console.log('LinkedIn Name Extractor: Extracted first name:', firstName);
+    console.log('LinkedIn Message Helper: Extracted first name:', firstName);
     
     return firstName;
   }
@@ -67,7 +67,7 @@
   function loadMessageTemplate() {
     chrome.storage.sync.get(['messageTemplate'], (result) => {
       messageTemplate = result.messageTemplate || DEFAULT_TEMPLATE;
-      console.log('LinkedIn Name Extractor: Loaded template:', messageTemplate);
+      console.log('LinkedIn Message Helper: Loaded template:', messageTemplate);
     });
   }
   
@@ -75,7 +75,7 @@
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === 'reloadSettings') {
       loadMessageTemplate();
-      console.log('LinkedIn Name Extractor: Settings reloaded');
+      console.log('LinkedIn Message Helper: Settings reloaded');
     }
   });
 
@@ -122,7 +122,7 @@
 
       // Mark as inserted
       messageBox.dataset.nameInserted = 'true';
-      console.log('LinkedIn Name Extractor: Inserted name into message box');
+      console.log('LinkedIn Message Helper: Inserted name into message box');
     }
   }
 
@@ -175,7 +175,7 @@
       subtree: true
     });
 
-    console.log('LinkedIn Name Extractor: Observer started');
+    console.log('LinkedIn Message Helper: Observer started');
   }
 
   // Returns a random delay between min and max ms to mimic human typing latency
@@ -191,7 +191,7 @@
     const isMessageBox = target.matches('.msg-form__contenteditable, textarea.msg-form__textarea, .msg-form__msg-content-container textarea, [contenteditable="true"][role="textbox"], .msg-s-message-group__message-field');
     
     if (isMessageBox || (target.isContentEditable && target.closest('.msg-form, .msg-s-message-list-container'))) {
-      console.log('LinkedIn Name Extractor: Message box focused');
+      console.log('LinkedIn Message Helper: Message box focused');
       // Use a randomized human-like delay (400-900ms) rather than a fixed
       // interval — zero/fixed delays are a bot signal LinkedIn may detect
       setTimeout(() => {
@@ -199,14 +199,14 @@
         if (firstName) {
           insertFirstName(target, firstName);
         } else {
-          console.log('LinkedIn Name Extractor: No name found to insert');
+          console.log('LinkedIn Message Helper: No name found to insert');
         }
       }, humanDelay());
     }
   }, true);
 
   // Initialize
-  console.log('LinkedIn Name Extractor: Extension loaded');
+  console.log('LinkedIn Message Helper: Extension loaded');
   
   // Initial attempt to populate
   setTimeout(populateMessageBox, 1000);

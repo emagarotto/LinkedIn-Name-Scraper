@@ -1,4 +1,4 @@
-# Debugging Guide - LinkedIn Name Extractor
+# Debugging Guide - LinkedIn Message Helper
 
 If the extension isn't working, follow these steps to diagnose the issue.
 
@@ -6,7 +6,7 @@ If the extension isn't working, follow these steps to diagnose the issue.
 
 ### 1. Verify Extension is Loaded
 1. Go to `chrome://extensions/`
-2. Find "LinkedIn Name Extractor"
+2. Find "LinkedIn Message Helper"
 3. Ensure it's **enabled** (toggle is blue)
 4. Check version is 1.1.0 or higher
 5. Click **"Reload"** button (circular arrow icon)
@@ -15,11 +15,11 @@ If the extension isn't working, follow these steps to diagnose the issue.
 1. Open LinkedIn
 2. Press **F12** or right-click → **Inspect**
 3. Click **Console** tab
-4. Look for messages starting with "LinkedIn Name Extractor:"
+4. Look for messages starting with "LinkedIn Message Helper:"
 5. You should see:
-   - `"LinkedIn Name Extractor: Extension loaded"`
-   - `"LinkedIn Name Extractor: Loaded template: ..."`
-   - `"LinkedIn Name Extractor: Observer started"`
+   - `"LinkedIn Message Helper: Extension loaded"`
+   - `"LinkedIn Message Helper: Loaded template: ..."`
+   - `"LinkedIn Message Helper: Observer started"`
 
 ### 3. Test Name Detection
 Open the Console (F12) and run:

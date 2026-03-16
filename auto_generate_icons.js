@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Automated icon generator for LinkedIn Name Extractor
+ * Automated icon generator for LinkedIn Message Helper
  * Run with: node auto_generate_icons.js
  */
 

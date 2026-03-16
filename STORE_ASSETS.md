@@ -64,14 +64,14 @@ Create a simple HTML page similar to `generate_icons.html` to design promotional
 ## Store Listing Text
 
 ### Name (REQUIRED)
-**LinkedIn Name Extractor**
+**LinkedIn Message Helper**
 
 ### Summary (REQUIRED - max 132 characters)
 **Auto-insert first names in LinkedIn messages and quickly attach files with one click.**
 
 ### Description (REQUIRED - max 16,000 characters)
 ```
-LinkedIn Name Extractor helps you personalize your LinkedIn messages faster with two powerful features:
+LinkedIn Message Helper helps you personalize your LinkedIn messages faster with two powerful features:
 
 🎯 AUTO-INSERT NAMES
 Automatically detects and inserts the recipient's first name when you open a message box. No more copying names from profiles!
@@ -106,7 +106,7 @@ Perfect for:
 - Networkers building relationships
 - Anyone who sends frequent LinkedIn messages
 
-Save time and personalize every message with LinkedIn Name Extractor!
+Save time and personalize every message with LinkedIn Message Helper!
 ```
 
 ### Category
@@ -122,7 +122,7 @@ You'll need a privacy policy URL. Here's a template:
 ```
 PRIVACY POLICY
 
-LinkedIn Name Extractor ("the Extension") is committed to protecting your privacy.
+LinkedIn Message Helper ("the Extension") is committed to protecting your privacy.
 
 DATA COLLECTION:
 The Extension does NOT collect, store, or transmit any personal data. All processing happens locally in your browser.
