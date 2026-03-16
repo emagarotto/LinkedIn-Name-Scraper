@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
-  <!-- LinkedIn blue background -->
-  <rect width="16" height="16" fill="#0073b1"/>
-  
-  <!-- White circle -->
-  <circle cx="8" cy="8" r="5.333333333333334" fill="white"/>
-  
-  <!-- LN text -->
-  <text x="8" y="8" 
-        font-family="Arial, sans-serif" 
-        font-size="5.6" 
-        font-weight="bold" 
-        fill="#0073b1" 
-        text-anchor="middle" 
-        dominant-baseline="central">LN</text>
+  <!-- LinkedIn blue rounded background -->
+  <rect width="16" height="16" rx="2" ry="2" fill="#0073b1"/>
+  <!-- Hamburger bars -->
+  <rect x="4" y="4" width="8" height="2" rx="1" fill="white"/>
+  <rect x="4" y="7" width="8" height="2" rx="1" fill="white"/>
+  <rect x="4" y="10" width="8" height="2" rx="1" fill="white"/>
 </svg>
